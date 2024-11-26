@@ -1,5 +1,1 @@
-# -stack_implementation_c++
-
-implemetation1.cpp
-stack is implemented using an array 
-
+# liked_list_implementation_c++
