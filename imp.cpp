@@ -14,28 +14,35 @@ public:
 
     void push_front(const T& value){
         head = new Node<T>(value,head);
-        if(l_size == 1) tail = head;
+        if(l_size == 0)
+            tail = head;
+
         ++l_size;
     }
     void pop_front(){
-        assert(!isEmpty());
-        //if(l_size == 1) tail = nullptr;
-        Node<T>* tmp = head;
-        if(head->next)
-            head = head->next;
-        else head = nullptr;
+        if (isEmpty()) {
+            throw std::underflow_error("Cannot pop from an empty list.");
+        }
+        Node<T>* tmp = head; // We know head is not null because it would have asserted.
+        head = head->next;
+        if(head == nullptr)
+            tail = nullptr;
 
         --l_size;
         delete tmp;
     }
 
     T front() const{
-        assert(!isEmpty());
+        if (isEmpty()) {
+            throw std::underflow_error("Cannot acsess elements in empty list.");
+        }
         return head->value;
     }
 
     T back() const{
-        assert(!isEmpty());
+        if (isEmpty()) {
+            throw std::underflow_error("Cannot acsess elements in empty list.");
+        }
         return tail->value;
     }
 
@@ -71,11 +78,15 @@ public:
         return false;
     }
     Node<T>* begin() const{
-        assert(!isEmpty());
+        if (isEmpty()) {
+            throw std::underflow_error("Cannot acsess elements in empty list.");
+        }
         return head;
     }
     Node<T>* end() const{
-        assert(!isEmpty());
+        if (isEmpty()) {
+            throw std::underflow_error("Cannot acsess elements in empty list.");
+        }
         return tail;
     }
     void push_back(const T& value){
@@ -91,11 +102,13 @@ public:
     }
 
     void pop_back(){
-        assert(!isEmpty());
+        if (isEmpty()) {
+            throw std::underflow_error("Cannot pop from an empty list.");
+        }
         Node<T>* tmp_tail = tail;
         if(l_size == 1)
         {
-            tail = nullptr;
+            head = tail = nullptr;
         }
         else{
             Node<T>* tmp = head;
@@ -146,15 +159,20 @@ int main() {
     myList.push_front(15);
     myList.push_front(30);
     myList.pop_front();
+    myList.pop_front();
+    myList.pop_front();
+    myList.pop_front();
+    
     std::cout << myList.begin()->value << " " << myList.end()->value << " ";
     std::cout<<myList.back();
     myList.clear();
-    myList.push_back(10);
-    myList.push_back(20);
-    myList.push_back(30);
-    myList.pop_back();
-    myList.pop_back();
+    myList.push_front(10);
+    myList.push_front(20);
+    myList.push_front(30);
+    myList.pop_front();
+    myList.pop_front();
     myList.print(); 
-    std::cout<<myList.size();
+    myList.pop_back();
+    
     return 0;
 }
