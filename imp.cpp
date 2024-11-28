@@ -1,6 +1,5 @@
 #include <iostream>
 #include "Node.cpp"
-#include <cassert>
 
 template <typename T>
 class List
@@ -54,7 +53,7 @@ public:
             pop_front();
         }
     }
-
+    
     int size() const{
         return l_size;
     }
@@ -123,13 +122,40 @@ public:
         --l_size;
         delete tmp_tail;
     }
-    void insert(){
-
+    void insert(int index,const T& value){
+        if (index < 0 || index >= l_size) {
+            throw std::underflow_error("index out of bounds can't insert.");
+        }
+        if(index == 0) push_front(value);
+        else if(index == l_size) push_back(value);
+        else{
+            Node<T>* tmp = head;
+            for(int i = 0;i < index;++i){
+                    tmp = tmp->next;
+            }
+            tmp->next = new Node<T>(value,tmp->next);
+            ++l_size;
+        }
+        
     }
-    void erase(){
-
+    void erase(int index){
+        if (index < 0 || index >= l_size) {
+            throw std::underflow_error("index out of bounds can't erase.");
+        }
+        if(index == 0) pop_front();
+        else if(index == l_size-1) pop_back();
+        else{
+            Node<T>* tmp = head;
+            for(int i = 0;i < index-1;++i){
+                tmp = tmp->next;
+            }
+            Node<T>* removable = tmp->next;
+            tmp->next = removable->next;
+            delete removable;
+            --l_size;
+        }
     }
-    void remove(){
+    void remove(const T& value){
 
     }
 private:
@@ -141,38 +167,50 @@ private:
 int main() {
     List<int> myList;
 
-    myList.push_front(10);
-    myList.push_front(20);
-    myList.push_front(30);
+    // myList.push_front(10);
+    // myList.push_front(20);
+    // myList.push_front(30);
 
-    myList.print(); 
+    // myList.print(); 
 
-    std::cout << "List contains 20? " << (myList.find(20) ? "Yes" : "No") << "\n";
+    // std::cout << "List contains 20? " << (myList.find(20) ? "Yes" : "No") << "\n";
 
-    myList.pop_front();
-    myList.print(); 
+    // myList.pop_front();
+    // myList.print(); 
 
-    myList.clear();
-    std::cout << "Is list empty? " << (myList.isEmpty() ? "Yes" : "No") << "\n"; 
-    myList.push_front(10);
-    myList.push_front(20);
-    myList.push_front(15);
-    myList.push_front(30);
-    myList.pop_front();
-    myList.pop_front();
-    myList.pop_front();
-    myList.pop_front();
+    // myList.clear();
+    // std::cout << "Is list empty? " << (myList.isEmpty() ? "Yes" : "No") << "\n"; 
+    // myList.push_front(10);
+    // myList.push_front(20);
+    // myList.push_front(15);
+    // myList.push_front(30);
+    // myList.pop_front();
+    // myList.pop_front();
+    // myList.pop_front();
+    // myList.pop_front();
     
-    std::cout << myList.begin()->value << " " << myList.end()->value << " ";
-    std::cout<<myList.back();
+    // std::cout << myList.begin()->value << " " << myList.end()->value << " ";
+    // std::cout<<myList.back();
     myList.clear();
     myList.push_front(10);
     myList.push_front(20);
     myList.push_front(30);
-    myList.pop_front();
-    myList.pop_front();
+    // myList.pop_front();
+    // myList.pop_front();
+    myList.insert(1,20);
+    myList.insert(0,15);
+    myList.insert(2,25);
     myList.print(); 
-    myList.pop_back();
+
+    std::cout<<myList.size()<<std::endl;
+    myList.erase(0);
+    std::cout<<myList.size()<<std::endl;
+    myList.erase(2);
+    std::cout<<myList.size()<<std::endl;
+    myList.erase(3);
     
+
+    myList.print(); 
+
     return 0;
 }
