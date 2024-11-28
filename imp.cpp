@@ -123,7 +123,7 @@ public:
         delete tmp_tail;
     }
     void insert(int index,const T& value){
-        if (index < 0 || index >= l_size) {
+        if (index < 0 || index > l_size) {
             throw std::underflow_error("index out of bounds can't insert.");
         }
         if(index == 0) push_front(value);
@@ -156,7 +156,32 @@ public:
         }
     }
     void remove(const T& value){
-
+        Node<T>* tmp = head;
+        Node<T>* prev = nullptr;
+        while(tmp != nullptr){
+            if(tmp->value == value)
+            {
+                if(tmp == head){
+                   pop_front();
+                   tmp = head;
+                }
+                else if(tmp == tail){
+                    pop_back();
+                    tmp = tail;
+                }
+                else{
+                    prev->next = tmp->next;
+                    delete tmp;
+                    tmp = prev->next;
+                    --l_size;
+                }
+            }
+            else {
+                prev = tmp;
+                tmp = tmp->next;
+                
+            }
+        }
     }
 private:
     Node<T>* head;
@@ -167,36 +192,39 @@ private:
 int main() {
     List<int> myList;
 
-    // myList.push_front(10);
-    // myList.push_front(20);
-    // myList.push_front(30);
+    myList.push_front(10);
+    myList.push_front(20);
+    myList.push_front(30);
 
-    // myList.print(); 
+    myList.print(); 
 
-    // std::cout << "List contains 20? " << (myList.find(20) ? "Yes" : "No") << "\n";
+    std::cout << "List contains 20? " << (myList.find(20) ? "Yes" : "No") << "\n";
 
-    // myList.pop_front();
-    // myList.print(); 
-
-    // myList.clear();
-    // std::cout << "Is list empty? " << (myList.isEmpty() ? "Yes" : "No") << "\n"; 
-    // myList.push_front(10);
-    // myList.push_front(20);
-    // myList.push_front(15);
-    // myList.push_front(30);
-    // myList.pop_front();
-    // myList.pop_front();
-    // myList.pop_front();
-    // myList.pop_front();
+    myList.pop_front();
+    myList.print(); 
+    std::cout << myList.begin()->value << " " << myList.end()->value << " ";
+    std::cout<<myList.back();
+    myList.clear();
+    std::cout << "Is list empty? " << (myList.isEmpty() ? "Yes" : "No") << "\n"; 
+    myList.push_front(10);
+    myList.push_front(20);
+    myList.push_front(15);
+    myList.push_front(30);
+    myList.pop_front();
+    myList.pop_front();
+    myList.pop_front();
+    myList.pop_front();
     
-    // std::cout << myList.begin()->value << " " << myList.end()->value << " ";
-    // std::cout<<myList.back();
+    
     myList.clear();
     myList.push_front(10);
     myList.push_front(20);
     myList.push_front(30);
-    // myList.pop_front();
-    // myList.pop_front();
+    myList.push_front(40);
+    myList.push_front(50);
+
+    myList.pop_front();
+    myList.pop_front();
     myList.insert(1,20);
     myList.insert(0,15);
     myList.insert(2,25);
@@ -208,8 +236,9 @@ int main() {
     myList.erase(2);
     std::cout<<myList.size()<<std::endl;
     myList.erase(3);
-    
-
+    myList.remove(10);
+    myList.remove(30);
+    myList.remove(50);
     myList.print(); 
 
     return 0;
