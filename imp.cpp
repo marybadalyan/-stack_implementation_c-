@@ -13,15 +13,18 @@ public:
     }
 
     void push_front(const T& value){
-        ++l_size;
         head = new Node<T>(value,head);
         if(l_size == 1) tail = head;
+        ++l_size;
     }
     void pop_front(){
         assert(!isEmpty());
-        if(l_size == 1) tail = nullptr;
+        //if(l_size == 1) tail = nullptr;
         Node<T>* tmp = head;
-        head = head->next;
+        if(head->next)
+            head = head->next;
+        else head = nullptr;
+
         --l_size;
         delete tmp;
     }
@@ -37,7 +40,7 @@ public:
     }
 
     bool isEmpty() const{
-        return l_size == 0; 
+        return head == nullptr;
     }
     void clear(){
         while(!isEmpty()){
@@ -75,18 +78,43 @@ public:
         assert(!isEmpty());
         return tail;
     }
-    void push_back(){
-
+    void push_back(const T& value){
+        Node<T>* newnode = new Node<T>(value,nullptr);
+        if(isEmpty()){
+            head = tail = newnode;
+        }
+        else{
+            tail->next = newnode;
+            tail = newnode;
+        }
+        ++l_size;
     }
 
     void pop_back(){
-
+        assert(!isEmpty());
+        Node<T>* tmp_tail = tail;
+        if(l_size == 1)
+        {
+            tail = nullptr;
+        }
+        else{
+            Node<T>* tmp = head;
+            while(tmp->next != tail)
+            {
+                tmp = tmp->next;
+            }
+        
+            tail = tmp;
+            tail->next = nullptr;
+        }
+        --l_size;
+        delete tmp_tail;
     }
     void insert(){
 
     }
     void erase(){
-        
+
     }
     void remove(){
 
@@ -120,5 +148,13 @@ int main() {
     myList.pop_front();
     std::cout << myList.begin()->value << " " << myList.end()->value << " ";
     std::cout<<myList.back();
+    myList.clear();
+    myList.push_back(10);
+    myList.push_back(20);
+    myList.push_back(30);
+    myList.pop_back();
+    myList.pop_back();
+    myList.print(); 
+    std::cout<<myList.size();
     return 0;
 }
