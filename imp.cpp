@@ -6,27 +6,34 @@ template <typename T>
 class List
 {
 public:
-    List():head(nullptr),l_size(0)
+    List():head(nullptr),l_size(0),tail(nullptr)
     {}
     ~List(){
         clear();
     }
 
-    void push(const T& value){
+    void push_front(const T& value){
         ++l_size;
         head = new Node<T>(value,head);
+        if(l_size == 1) tail = head;
     }
-    void pop(){
+    void pop_front(){
         assert(!isEmpty());
-        --l_size;
+        if(l_size == 1) tail = nullptr;
         Node<T>* tmp = head;
         head = head->next;
+        --l_size;
         delete tmp;
     }
 
-    T top() const{
+    T front() const{
         assert(!isEmpty());
         return head->value;
+    }
+
+    T back() const{
+        assert(!isEmpty());
+        return tail->value;
     }
 
     bool isEmpty() const{
@@ -34,7 +41,7 @@ public:
     }
     void clear(){
         while(!isEmpty()){
-            pop();
+            pop_front();
         }
     }
 
@@ -60,28 +67,58 @@ public:
         }
         return false;
     }
+    Node<T>* begin() const{
+        assert(!isEmpty());
+        return head;
+    }
+    Node<T>* end() const{
+        assert(!isEmpty());
+        return tail;
+    }
+    void push_back(){
 
+    }
+
+    void pop_back(){
+
+    }
+    void insert(){
+
+    }
+    void erase(){
+        
+    }
+    void remove(){
+
+    }
 private:
     Node<T>* head;
     int l_size;
+    Node<T>* tail;
 };
 
 int main() {
     List<int> myList;
 
-    myList.push(10);
-    myList.push(20);
-    myList.push(30);
+    myList.push_front(10);
+    myList.push_front(20);
+    myList.push_front(30);
 
     myList.print(); 
 
     std::cout << "List contains 20? " << (myList.find(20) ? "Yes" : "No") << "\n";
 
-    myList.pop();
+    myList.pop_front();
     myList.print(); 
 
     myList.clear();
     std::cout << "Is list empty? " << (myList.isEmpty() ? "Yes" : "No") << "\n"; 
-
+    myList.push_front(10);
+    myList.push_front(20);
+    myList.push_front(15);
+    myList.push_front(30);
+    myList.pop_front();
+    std::cout << myList.begin()->value << " " << myList.end()->value << " ";
+    std::cout<<myList.back();
     return 0;
 }
